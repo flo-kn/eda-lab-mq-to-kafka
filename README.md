@@ -49,14 +49,17 @@ This lab scenario utilizes the officially supported IBM MQ connectors from Confl
     
     # Latest version at the time of this writing was 11.0.8
 
+    # Set the version to whatever you got from the command above
+    version=11.0.8
+
     # Manually download the file from https://www.confluent.io/hub/confluentinc/kafka-connect-ibmmq
-    unzip ~/Downloads/confluentinc-kafka-connect-ibmmq-11.0.8 -d ./data/connect-jars/
+    unzip ~/Downloads/confluentinc-kafka-connect-ibmmq-$version -d ./data/connect-jars/
     ```
 
 1.  Download the required IBM MQ client jars:
     ```bash
-    curl -s https://repo1.maven.org/maven2/com/ibm/mq/com.ibm.mq.allclient/9.2.2.0/com.ibm.mq.allclient-9.2.2.0.jar -o com.ibm.mq.allclient-9.2.2.0.jar
-    cp com.ibm.mq.allclient-9.2.2.0.jar data/connect-jars/confluentinc-kafka-connect-ibmmq-11.0.8/lib/.
+    curl -s https://repo1.maven.org/maven2/com/ibm/mq/com.ibm.mq.allclient/9.3.5.0/com.ibm.mq.allclient-9.3.5.0.jar -o com.ibm.mq.allclient-9.3.5.0.jar
+    cp com.ibm.mq.allclient-9.3.5.0.jar data/connect-jars/confluentinc-kafka-connect-ibmmq-$version/lib/.
     ```
 
 1. Start the containers locally by launching the `docker-compose` stack:
@@ -71,6 +74,7 @@ This lab scenario utilizes the officially supported IBM MQ connectors from Confl
     #   xyzZ Started web server
     #   xyzZ AMQ5041I: The queue manager task 'AUTOCONFIG' has ended. [CommentInsert1(AUTOCONFIG)]
     ```
+    _(In my personal test I never found this entry)_
 
 1. Access the Store Simulator web application via [http://localhost:8080/#/simulator](http://localhost:8080/#/simulator).
     1. Under the Simulator tab, select **IBMMQ** as the backend, any number of events you wish to simulate, and click the **Simulate** button.
@@ -82,10 +86,14 @@ This lab scenario utilizes the officially supported IBM MQ connectors from Confl
 
 1. Configure the Kafka Connector instance via the Kafka Connect REST API
 
+   ```bash
+   cd ..
+   ```
+
     ```bash
     curl -i -X PUT -H  "Content-Type:application/json" \
         http://localhost:8083/connectors/eda-store-source/config \
-        -d @kustomize/environment/kconnect/config/mq-confluent-source.json
+        -d @kustomize/environment/kconnect/confluent/config/mq-confluent-source.json
     ```
 
     You should receive a response similar to the following:

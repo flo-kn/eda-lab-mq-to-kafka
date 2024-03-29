@@ -6,14 +6,16 @@
 version: '3.8'
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:6.1.1
+    image: confluentinc/cp-zookeeper:7.6.0
+    hostname: zookeeper
     container_name: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
 
   broker:
-    image: confluentinc/cp-kafka:6.1.1
+    image: confluentinc/cp-kafka:7.6.0
+    hostname: broker
     container_name: broker
     depends_on:
       - zookeeper
@@ -41,26 +43,26 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:9092
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 100
 
-  #schema-registry:
-  #  image: confluentinc/cp-schema-registry:6.1.1
-  #  container_name: schema-registry
-  #  ports:
-  #    - "8081:8081"
-  #  depends_on:
-  #    - broker
-  #  environment:
-  #    SCHEMA_REGISTRY_HOST_NAME: schema-registry
-  #    SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: broker:29092
+  schema-registry:
+    image: confluentinc/cp-schema-registry:7.6.0
+    container_name: schema-registry
+    ports:
+      - "8081:8081"
+    depends_on:
+      - broker
+    environment:
+     SCHEMA_REGISTRY_HOST_NAME: schema-registry
+     SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: broker:9092
 
-  kafka-connect:
-    image: confluentinc/cp-kafka-connect-base:6.1.1
+    kafka-connect:
+    image: confluentinc/cp-kafka-connect-base:7.6.0
     container_name: kafka-connect
     depends_on:
       - broker
@@ -69,6 +71,7 @@ services:
       - 8083:8083
     environment:
       CONNECT_BOOTSTRAP_SERVERS: "broker:29092"
+      CONNECT_BOOTSTRAP_SERVERS: "broker:9092"
       CONNECT_REST_PORT: 8083
       CONNECT_GROUP_ID: kafka-connect
       CONNECT_CONFIG_STORAGE_TOPIC: _connect-configs
@@ -92,7 +95,7 @@ services:
       - $PWD/data:/data
 
   control-center:
-    image: confluentinc/cp-enterprise-control-center:6.1.1
+    image: confluentinc/cp-enterprise-control-center:7.6.0
     container_name: control-center
     depends_on:
       - broker
@@ -101,6 +104,7 @@ services:
       - "9021:9021"
     environment:
       CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:29092'
+      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:9092'
       CONTROL_CENTER_CONNECT_CONNECT_CLUSTER: 'kafka-connect:8083'
   #    CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
   #    CONTROL_CENTER_KSQL_KSQLDB_URL: "http://ksqldb:8088"
@@ -128,7 +132,8 @@ services:
         /etc/confluent/docker/run
 
   ibmmq:
-    image: ibmcom/mq:9.2.2.0-r1
+    # image: ibmcom/mq:9.2.2.0-r1
+    image: ibm-mqadvanced-server-dev:9.3.5.0-arm64
     container_name: ibmmq
     ports:
         - '1414:1414'
@@ -142,16 +147,23 @@ services:
     environment:
         LICENSE: accept
         MQ_QMGR_NAME: QM1
+        MQ_ADMIN_PASSWORD: passw0rd # user: admin
         MQ_APP_PASSWORD: adummypasswordusedlocally
         MQ_ENABLE_METRICS: "true"
 
   simulator:
-    image: quay.io/ibmcase/eda-store-simulator:latest
+    # image: quay.io/ibmcase/eda-store-simulator:latest
+    image: docker.io/effelow/eda-store-simulator:latest # Selfbacked for ARM-Based M1 Chip
     container_name: simulator
     hostname: storeapp
     ports:
       - "8080:8080"
     environment:
+      ES_APICURIO_URL: http://schema-registry:8081
+      KAFKA_BOOTSTRAP_SERVERS: broker:9092
+      KAFKA_CERT_PWD: haaaaallllllooooooo
+      USER_CERT_PWD: heeeeeellllllllooooooo
+      KAFKA_TOPIC_NAME: huhu
       APP_TARGET_MESSAGING: IBMMQ
       MQ_HOST: ibmmq
       MQ_APP_PASSWORD: adummypasswordusedlocally
@@ -162,6 +174,7 @@ services:
       MQ_QUEUE_NAME: DEV.QUEUE.1
     depends_on:
       - ibmmq
+      - broker
 
 volumes:
   qm1data:
