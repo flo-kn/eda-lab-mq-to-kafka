@@ -82,10 +82,14 @@ This lab scenario utilizes the officially supported IBM MQ connectors from Confl
 
 1. Configure the Kafka Connector instance via the Kafka Connect REST API
 
+   ```bash
+   cd ..
+   ```
+
     ```bash
     curl -i -X PUT -H  "Content-Type:application/json" \
         http://localhost:8083/connectors/eda-store-source/config \
-        -d @kustomize/environment/kconnect/config/mq-confluent-source.json
+        -d @kustomize/environment/kconnect/confluent/config/mq-confluent-source.json
     ```
 
     You should receive a response similar to the following:
