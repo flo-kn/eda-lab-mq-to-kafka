@@ -86,9 +86,7 @@ This lab scenario utilizes the officially supported IBM MQ connectors from Confl
 
 1. Configure the Kafka Connector instance via the Kafka Connect REST API
 
-   ```bash
-   cd ..
-   ```
+   Make sure to be in the right folder with command to correctly reference the `mq-confluent-source.json`:
 
     ```bash
     curl -i -X PUT -H  "Content-Type:application/json" \
