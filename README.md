@@ -47,10 +47,10 @@ This lab scenario utilizes the officially supported IBM MQ connectors from Confl
       grep --only-matching  "confluent-hub install confluentinc/kafka-connect-ibmmq\:[0-9]*\.[0-9]*\.[0-9]*" | \
       sed "s/confluent-hub install confluentinc\/kafka-connect-ibmmq\://g"
     
-    # Latest version at the time of this writing was 11.0.8
+    # Latest version at the time of this writing was 12.2.4
 
     # Set the version to whatever you got from the command above
-    version=11.0.8
+    version=12.2.4
 
     # Manually download the file from https://www.confluent.io/hub/confluentinc/kafka-connect-ibmmq
     unzip ~/Downloads/confluentinc-kafka-connect-ibmmq-$version -d ./data/connect-jars/
