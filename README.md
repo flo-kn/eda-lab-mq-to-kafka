@@ -8,7 +8,7 @@ write the item sold to the `items` kafka topic.
 In this readme we present local deployment to your workstation deployments with  Kafka Confluent or Kafka Strimzi and the deployment of Kafka Confluent on OpenShift.
 
 For IBM Event Streams and IBM MQ with Cloud Pak for Integration, 
-we have different labs described in the [EDA use cases](https://ibm-cloud-architecture.github.io/refarch-eda/use-cases/connect-mq/)
+we have different labs described in the [forked EDA use cases](https://flo-kn.github.io/refarch-eda/use-cases/connect-mq/)
 
 ## Audience
 
