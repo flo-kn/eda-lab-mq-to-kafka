@@ -61,7 +61,7 @@ services:
      SCHEMA_REGISTRY_HOST_NAME: schema-registry
      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: broker:9092
 
-    kafka-connect:
+  kafka-connect:
     image: confluentinc/cp-kafka-connect-base:7.6.0
     container_name: kafka-connect
     depends_on:
@@ -70,7 +70,7 @@ services:
     ports:
       - 8083:8083
     environment:
-      CONNECT_BOOTSTRAP_SERVERS: "broker:29092"
+      # CONNECT_BOOTSTRAP_SERVERS: "broker:29092"
       CONNECT_BOOTSTRAP_SERVERS: "broker:9092"
       CONNECT_REST_PORT: 8083
       CONNECT_GROUP_ID: kafka-connect
@@ -103,7 +103,7 @@ services:
     ports:
       - "9021:9021"
     environment:
-      CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:29092'
+      #CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:29092'
       CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:9092'
       CONTROL_CENTER_CONNECT_CONNECT_CLUSTER: 'kafka-connect:8083'
   #    CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
