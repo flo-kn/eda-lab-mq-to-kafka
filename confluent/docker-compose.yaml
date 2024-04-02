@@ -44,6 +44,8 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:9092
+      # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://broker:29092,PLAINTEXT_HOST://localhost:9092
+
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
@@ -66,7 +68,7 @@ services:
     container_name: kafka-connect
     depends_on:
       - broker
-  #    - schema-registry
+      - schema-registry
     ports:
       - 8083:8083
     environment:
@@ -78,9 +80,9 @@ services:
       CONNECT_OFFSET_STORAGE_TOPIC: _connect-offsets
       CONNECT_STATUS_STORAGE_TOPIC: _connect-status
       CONNECT_KEY_CONVERTER: org.apache.kafka.connect.storage.StringConverter
-      #CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      # CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
       CONNECT_VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
-      #CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
       CONNECT_REST_ADVERTISED_HOST_NAME: "kafka-connect"
       CONNECT_LOG4J_APPENDER_STDOUT_LAYOUT_CONVERSIONPATTERN: "[%d] %p %X{connector.context}%m (%c:%L)%n"
       CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: "1"
@@ -99,14 +101,15 @@ services:
     container_name: control-center
     depends_on:
       - broker
-  #    - schema-registry
+      - schema-registry
     ports:
       - "9021:9021"
     environment:
       #CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:29092'
       CONTROL_CENTER_BOOTSTRAP_SERVERS: 'broker:9092'
       CONTROL_CENTER_CONNECT_CONNECT_CLUSTER: 'kafka-connect:8083'
-  #    CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      # CONTROL_CENTER_CONNECT_CONNECT_CLUSTER: http://kafka-connect:8083 
+      CONTROL_CENTER_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
   #    CONTROL_CENTER_KSQL_KSQLDB_URL: "http://ksqldb:8088"
       # The advertised URL needs to be the URL on which the browser
       #  can access the KSQL server (e.g. http://localhost:8088/info)
@@ -147,7 +150,7 @@ services:
     environment:
         LICENSE: accept
         MQ_QMGR_NAME: QM1
-        MQ_ADMIN_PASSWORD: passw0rd # user: admin
+        MQ_ADMIN_PASSWORD: admin # user: admin
         MQ_APP_PASSWORD: adummypasswordusedlocally
         MQ_ENABLE_METRICS: "true"
 
@@ -164,7 +167,7 @@ services:
       KAFKA_CERT_PWD: haaaaallllllooooooo
       USER_CERT_PWD: heeeeeellllllllooooooo
       KAFKA_TOPIC_NAME: huhu
-      APP_TARGET_MESSAGING: IBMMQ
+      APP_TARGET_MESSAGING: IBMMQ,Kafka
       MQ_HOST: ibmmq
       MQ_APP_PASSWORD: adummypasswordusedlocally
       MQ_PORT: 1414
