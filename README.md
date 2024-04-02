@@ -36,7 +36,7 @@ This lab scenario utilizes the officially supported IBM MQ connectors from Confl
 
 1. Clone this repository:
     ```bash
-    git clone https://github.com/ibm-cloud-architecture/eda-lab-mq-to-kafka.git
+    git clone https://github.com/flo-kn/eda-lab-mq-to-kafka.git
     cd eda-lab-mq-to-kafka/confluent
     ```
 
