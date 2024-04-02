@@ -13,5 +13,5 @@
   "jms.destination.name": "DEV.QUEUE.1",
   "jms.destination.type": "QUEUE",
   "kafka.topic": "items",
-  "confluent.topic.bootstrap.servers": "broker:29092"
+  "confluent.topic.bootstrap.servers": "broker:9092"
 }
