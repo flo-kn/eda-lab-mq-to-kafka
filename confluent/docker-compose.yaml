@@ -153,6 +153,8 @@ services:
         MQ_ADMIN_PASSWORD: admin # user: admin
         MQ_APP_PASSWORD: adummypasswordusedlocally
         MQ_ENABLE_METRICS: "true"
+        MQ_CONSOLE_DEFAULT_CCDT_PORT: 1415 # trying to fix: MQWB2020E: The 'mqConsoleDefaultCCDTPort' property has an unsupported value of '${env.MQ_CONSOLE_DEFAULT_CCDT_PORT}'.
+
 
   simulator:
     # image: quay.io/ibmcase/eda-store-simulator:latest
