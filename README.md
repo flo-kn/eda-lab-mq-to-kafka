@@ -62,6 +62,20 @@ This lab scenario utilizes the officially supported IBM MQ connectors from Confl
     cp com.ibm.mq.allclient-9.3.5.0.jar data/connect-jars/confluentinc-kafka-connect-ibmmq-$version/lib/.
     ```
 
+1. Verify:
+   Once copied over the directory should be populated with various jar files resembling something like this:
+   ```bash
+   ll ./data/connect-jars/confluentinc-kafka-connect-ibmmq-12.2.4/lib/
+    bcprov-jdk15on-1.68.jar                   jose4j-0.9.3.jar                        
+    com.ibm.mq.allclient-9.3.5.0.jar          kafka-connect-ibmmq-12.2.4.jar          
+    confluent-licensing-new-6.2.0-ce.jar      kafka-connect-jms-source-base-12.2.4.jar
+    confluent-serializers-new-6.2.0-ce.jar    metrics-core-2.2.0.jar                  
+    connect-utils-0.3.1.jar                   reload4j-1.2.22.jar                     
+    gson-2.9.0.jar                            slf4j-api-1.7.30.jar                    
+    javax.jms-api-2.0.1.jar                   slf4j-reload4j-2.0.3.jar                
+    jaxb-api-2.3.0.jar
+   ```
+
 1. Start the containers locally by launching the `docker-compose` stack:
     ```bash
     docker-compose up -d
